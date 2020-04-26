@@ -1,0 +1,7 @@
+my:
+  datesources:
+    url: http:xxx1
+    name: devName
+    password: psworddev
+  drives:
+    classname: devclass
