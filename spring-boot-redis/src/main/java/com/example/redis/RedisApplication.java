@@ -2,9 +2,10 @@ package com.example.redis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.ValueOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.hash.HashMapper;
 import org.springframework.data.redis.hash.Jackson2HashMapper;
 import org.springframework.data.redis.hash.ObjectHashMapper;
@@ -16,14 +17,14 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Map;
 
-import static org.bouncycastle.asn1.x500.style.RFC4519Style.o;
+
 
 @SpringBootApplication
 @Controller
 public class RedisApplication {
 
     @Autowired
-    private RedisTest redisTest;
+    private RedisTemplate redisTemplate;
 
     public static void main(String[] args) {
         SpringApplication.run(RedisApplication.class, args);
@@ -32,17 +33,13 @@ public class RedisApplication {
     @RequestMapping(value = "/")
     @ResponseBody
     public String redis() {
-        HashOperations<String, byte[], byte[]> hashOperations = redisTest.getTemplate().opsForHash();
-
-
         Person person = getPerson();
-
-        HashOperations<String, String, Object> d = redisTest.getTemplate().opsForHash();
-        Person person1 = jackson2HashMapper(d, person);
+        Person person1 = jackson2HashMapper(person);
         return person1.toString();
     }
 
-    public Person jackson2HashMapper(HashOperations<String, String, Object> hashOperations, Person person) {
+    public Person jackson2HashMapper(Person person) {
+        HashOperations<String, String, Object> hashOperations = redisTemplate.opsForHash();
         Jackson2HashMapper jackson2HashMapper = new Jackson2HashMapper(false);
         Map<String, Object> stringObjectMap = jackson2HashMapper.toHash(person);
 
@@ -54,7 +51,8 @@ public class RedisApplication {
         return o;
     }
 
-    public Person objectHashMapper(HashOperations<String, byte[], byte[]> hashOperations, Person person) {
+    public Person objectHashMapper(Person person) {
+        HashOperations<String, byte[], byte[]> hashOperations = redisTemplate.opsForHash();
         HashMapper<Object, byte[], byte[]> mapper = new ObjectHashMapper();
         Map<byte[], byte[]> mappedHash = mapper.toHash(person);
         hashOperations.putAll("person", mappedHash);
