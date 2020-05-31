@@ -22,7 +22,7 @@ public class NewTask {
             String message = String.join(" ", args);
 
             channel.basicPublish("", TASK_QUEUE_NAME, MessageProperties.PERSISTENT_TEXT_PLAIN, message.getBytes());
-
+            channel.waitForConfirmsOrDie(2);
             System.out.println(" [x] Sent '" + message + "'");
         }
     }
