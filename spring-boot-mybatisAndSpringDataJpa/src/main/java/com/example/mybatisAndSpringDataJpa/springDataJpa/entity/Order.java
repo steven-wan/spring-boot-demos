@@ -13,7 +13,7 @@ import java.util.Date;
  */
 @Data
 @Entity
-@Table(name = "ORDER")
+@Table(name = "\"ORDER\"")
 public class Order extends BaseEntity{
 
     /**

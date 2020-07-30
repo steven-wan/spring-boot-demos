@@ -3,7 +3,10 @@ package com.example.mybatisAndSpringDataJpa.springDataJpa.service;
 import com.example.mybatisAndSpringDataJpa.springDataJpa.dao.UserDao;
 import com.example.mybatisAndSpringDataJpa.springDataJpa.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author steven-wan
@@ -17,5 +20,9 @@ public class Uservice {
 
     public User findById(Integer id) {
         return userDao.findById(id).get();
+    }
+
+    public List<User> getUsersByPageOrderedByIdDesc() {
+        return userDao.findAllByOrderByIdDesc(PageRequest.of(1, 3));
     }
 }
