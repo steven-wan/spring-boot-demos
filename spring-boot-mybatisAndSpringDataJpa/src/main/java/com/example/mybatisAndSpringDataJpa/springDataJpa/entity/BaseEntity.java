@@ -17,13 +17,13 @@ public class BaseEntity {
      * ID
      */
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy= GenerationType.AUTO)
     Integer id;
     /**
      *创建时间
      */
     @Column(name = "CREATED_AT")
-    Date createAt;
+    Date createdAt;
 
     /**
      *更新时间
